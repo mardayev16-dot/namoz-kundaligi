@@ -1,14 +1,40 @@
-{
-  "name": "Namoz Kundaligi",
-  "short_name": "Namoz",
-  "description": "Kunlik besh vaqt namozingizni belgilab boring",
-  "start_url": "./index.html",
-  "scope": "./",
-  "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#F2E9D2",
-  "theme_color": "#0B6E5F",
-  "icons": [
-    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
-  ]
-}
+	
+id	"/namoz-kundaligi/"
+name	"Namoz Kundaligi"
+short_name	"Namoz"
+description	"Kunlik besh vaqt namozingizni belgilab boring"
+start_url	"./index.html"
+scope	"./"
+display	"standalone"
+orientation	"portrait"
+background_color	"#F2E9D2"
+theme_color	"#0B6E5F"
+categories	
+0	"lifestyle"
+1	"utilities"
+icons	
+0	
+src	"icon.svg"
+sizes	"any"
+type	"image/svg+xml"
+purpose	"any"
+1	
+src	"icon-192.png"
+sizes	"192x192"
+type	"image/png"
+purpose	"any"
+2	
+src	"icon-512.png"
+sizes	"512x512"
+type	"image/png"
+purpose	"any"
+3	
+src	"icon-192.png"
+sizes	"192x192"
+type	"image/png"
+purpose	"maskable"
+4	
+src	"icon-512.png"
+sizes	"512x512"
+type	"image/png"
+purpose	"maskable"
