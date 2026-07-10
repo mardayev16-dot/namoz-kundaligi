@@ -1,0 +1,14 @@
+{
+  "name": "Namoz Kundaligi",
+  "short_name": "Namoz",
+  "description": "Kunlik besh vaqt namozingizni belgilab boring",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F2E9D2",
+  "theme_color": "#0B6E5F",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
