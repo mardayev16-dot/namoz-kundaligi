@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0B6E5F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>Namoz Kundaligi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2E9D2;
+    --surface:#FFFFFF;
+    --ink:#1B2A26;
+    --ink-soft:#5C6E67;
+    --teal:#0B6E5F;
+    --teal-deep:#063D34;
+    --gold:#E3A825;
+    --gold-soft:#F6DFA0;
+    --green:#28A650;
+    --green-bg:#DBF3E1;
+    --red:#E14B3F;
+    --red-bg:#FBDFDB;
+    --border:#E6D9B8;
+    --shadow: 0 10px 28px rgba(6,61,52,0.14);
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background-color:var(--bg);
+    background-image:
+      radial-gradient(circle at 50% 0%, rgba(11,110,95,0.05), transparent 60%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%230B6E5F' stroke-width='1.1' stroke-opacity='0.10'%3E%3Cpath d='M60 6 L96 30 L96 90 L60 114 L24 90 L24 30 Z'/%3E%3Cpath d='M60 6 L74 60 L60 114 L46 60 Z'/%3E%3Cpath d='M24 30 L74 60 L96 30'/%3E%3Cpath d='M24 90 L74 60 L96 90'/%3E%3Ccircle cx='60' cy='60' r='10'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: auto, 120px 120px;
+    color:var(--ink);
+    font-family:'Manrope',sans-serif;
+    min-height:100vh;
+    padding:calc(14px + env(safe-area-inset-top)) 14px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  .wrap{max-width:520px;margin:0 auto;}
+
+  /* ---- Header ---- */
+  .header{text-align:center;margin-bottom:12px;position:relative;}
+  .star-mark{width:26px;height:26px;margin:0 auto 6px;color:var(--gold);filter:drop-shadow(0 2px 4px rgba(227,168,37,0.35));}
+  h1{font-family:'Amiri',serif;font-weight:700;font-size:1.55rem;margin:0 0 2px;color:var(--teal-deep);letter-spacing:0.3px;}
+  .subtitle{color:var(--ink-soft);font-size:0.8rem;font-weight:600;}
+  .greeting{color:var(--teal);font-size:0.82rem;font-weight:700;margin-top:4px;}
+
+  .settings-gear{
+    position:absolute; top:0; right:0; width:34px;height:34px;border-radius:10px;
+    border:1px solid var(--border); background:var(--surface); color:var(--teal-deep);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--shadow);
+  }
+  .settings-gear:active{background:var(--gold-soft); transform:scale(0.94) rotate(20deg);}
+  .settings-gear svg{width:18px;height:18px;}
+
+  .settings-modal{ max-width:420px; }
+  .settings-row{ margin-bottom:14px; }
+  .settings-label{ display:block; font-size:0.78rem; font-weight:700; color:var(--ink-soft); margin-bottom:6px; }
+  .settings-input{
+    width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border);
+    background:var(--bg); font-family:'Manrope',sans-serif; font-size:0.9rem; color:var(--ink);
+  }
+  .settings-input:focus{ outline:2px solid var(--gold); }
+
+  .exit-modal{
+    max-width:340px; text-align:center; padding-top:32px;
+  }
+  .exit-icon{ width:40px;height:40px; margin:0 auto 14px; filter:drop-shadow(0 2px 6px rgba(227,168,37,0.4)); }
+  .exit-title{
+    font-family:'Amiri',serif; font-weight:700; font-size:1.3rem; color:var(--teal-deep); margin-bottom:4px;
+  }
+  .exit-sub{ color:var(--ink-soft); font-size:0.82rem; margin-bottom:20px; }
+  .exit-buttons{ display:flex; flex-direction:column; gap:10px; }
+  .exit-btn{
+    border:none; border-radius:100px; padding:12px; font-weight:700; font-size:0.9rem; cursor:pointer;
+  }
+  .exit-btn.stay{ background:var(--teal); color:#fff; }
+  .exit-btn.leave{ background:var(--bg); color:var(--red); border:1px solid var(--border); }
+  .exit-btn:active{ transform:scale(0.97); }
+
+  /* ---- Notification / settings banners ---- */
+  .banner{
+    display:none; background:var(--red-bg); border:1px solid #EFB6AF; color:var(--red);
+    padding:14px 16px; border-radius:14px; font-size:0.92rem; font-weight:700;
+    margin-bottom:12px; align-items:flex-start; gap:10px;
+  }
+  .banner.show{display:flex;}
+  .banner svg{width:20px;height:20px;flex-shrink:0;margin-top:1px;}
+  .banner .sub{font-weight:600;color:#9B342A;display:block;margin-top:2px;font-size:0.84rem;}
+
+  .notify-card{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:8px 12px; margin-bottom:8px; box-shadow:var(--shadow);
+  }
+  .notify-card .txt{font-size:0.76rem; font-weight:600; color:var(--ink);}
+  .notify-card .txt span{display:block; font-size:0.68rem; color:var(--ink-soft); font-weight:500; margin-top:1px;}
+  .notify-btn{
+    background:var(--teal); color:#fff; border:none; border-radius:100px;
+    padding:6px 12px; font-weight:700; font-size:0.74rem; cursor:pointer; white-space:nowrap;
+  }
+  .notify-btn:disabled{background:var(--green); opacity:0.9; cursor:default;}
+  .notify-btn:active{transform:scale(0.97);}
+
+  /* ---- Calendar card ---- */
+  .card{
+    background:var(--surface); border-radius:18px; box-shadow:var(--shadow);
+    border:1px solid var(--border); padding:12px 12px 14px;
+  }
+  .cal-nav{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;}
+  .nav-btn{
+    width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--bg);
+    color:var(--teal-deep);display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+  .nav-btn:active{background:var(--gold-soft); transform:scale(0.95);}
+  .nav-btn svg{width:16px;height:16px;}
+  .month-title{font-family:'Amiri',serif;font-size:1.1rem;font-weight:700;color:var(--teal-deep);text-align:center;}
+  .month-title .year{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:500;color:var(--ink-soft);display:block;margin-top:1px;letter-spacing:1px;}
+
+  .today-btn{
+    display:block;margin:0 auto 10px;background:var(--gold-soft);border:1px solid var(--gold);
+    color:var(--teal-deep);font-weight:700;font-size:0.7rem;padding:4px 12px;border-radius:100px;cursor:pointer;
+  }
+  .today-btn:active{transform:scale(0.96);}
+
+  .rose-total-bar{
+    text-align:center; font-size:0.7rem; font-weight:700; color:var(--teal-deep);
+    background:var(--gold-soft); border-radius:100px; padding:4px 10px; margin-bottom:8px;
+  }
+
+  .weekdays{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px;}
+  .weekdays span{text-align:center;font-size:0.65rem;font-weight:800;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.4px;}
+
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+  .day{
+    aspect-ratio:1;min-height:34px;border-radius:9px;border:1px solid var(--border);background:var(--bg);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;
+    font-family:'IBM Plex Mono',monospace; touch-action:manipulation;
+  }
+  .day:active{transform:scale(0.94);}
+  .day.dim{opacity:0.3;cursor:default;}
+  .day.dim:active{transform:none;}
+  .day .num{font-size:0.82rem;font-weight:600;color:var(--ink);}
+  .day.complete{background:var(--green-bg);border-color:#9EDBAF;}
+  .day.complete .num{color:var(--green);font-weight:800;}
+  .day.missed{background:var(--red-bg);border-color:#F0B2AA;}
+  .day.missed .num{color:var(--red);font-weight:800;}
+  .day.today{border:2px solid var(--teal);}
+  .day.today .num{color:var(--teal-deep);font-weight:900;}
+
+  .dots{display:flex;gap:1.5px;margin-top:2px;}
+  .dots span{width:3px;height:3px;border-radius:50%;background:var(--border);}
+  .dots span.on{background:var(--gold);}
+
+  .day-roses{
+    position:absolute; top:1px; right:2px; font-size:6px; line-height:1;
+    letter-spacing:-1px; filter:drop-shadow(0 0 1px rgba(0,0,0,0.15));
+  }
+
+  .footnote{text-align:center;color:var(--ink-soft);font-size:0.68rem;margin-top:10px;line-height:1.4;}
+
+  /* ---- Modal ---- */
+  .overlay{
+    display:none;position:fixed;inset:0;background:rgba(6,61,52,0.5);align-items:center;justify-content:center;
+    padding:20px;z-index:50;
+  }
+  .overlay.show{display:flex;}
+  .modal{
+    background:var(--surface);border-radius:22px;max-width:400px;width:100%;
+    padding:26px 22px 22px;box-shadow:0 24px 60px rgba(6,61,52,0.4);position:relative;overflow:hidden;
+    transition:background 0.4s;
+  }
+  .modal.celebrate{animation:glow-pulse 1.3s ease-out;}
+  @keyframes glow-pulse{
+    0%{box-shadow:0 24px 60px rgba(6,61,52,0.4);}
+    30%{box-shadow:0 0 60px 10px rgba(227,168,37,0.55);}
+    100%{box-shadow:0 24px 60px rgba(6,61,52,0.4);}
+  }
+
+  .sparkle-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+  .sparkle{
+    position:absolute; width:14px;height:14px; color:var(--gold);
+    animation:sparkle-pop 1s ease-out forwards;
+  }
+  .sparkle svg{width:100%;height:100%;}
+  @keyframes sparkle-pop{
+    0%{transform:translateY(0) scale(0) rotate(0deg); opacity:1;}
+    70%{opacity:1;}
+    100%{transform:translateY(-90px) scale(1.1) rotate(160deg); opacity:0;}
+  }
+
+  .barakalla{
+    position:absolute; top:14px; left:50%; transform:translateX(-50%) translateY(-10px);
+    background:var(--gold); color:var(--teal-deep); font-weight:800; font-size:0.82rem;
+    padding:6px 16px; border-radius:100px; opacity:0; pointer-events:none;
+    animation:toast-in 1.6s ease-out forwards;
+  }
+  @keyframes toast-in{
+    0%{opacity:0; transform:translateX(-50%) translateY(-10px);}
+    15%{opacity:1; transform:translateX(-50%) translateY(0);}
+    80%{opacity:1;}
+    100%{opacity:0; transform:translateX(-50%) translateY(-6px);}
+  }
+
+  .modal-close{
+    position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:9px;border:none;
+    background:var(--bg);color:var(--ink-soft);display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+  .modal-close:active{background:var(--gold-soft);}
+  .modal-close svg{width:15px;height:15px;}
+
+  .modal-date{font-family:'Amiri',serif;font-size:1.32rem;font-weight:700;color:var(--teal-deep);margin:0 0 2px;}
+  .modal-weekday{color:var(--ink-soft);font-size:0.85rem;font-weight:700;margin-bottom:18px;}
+
+  .prayer-row{display:flex;align-items:center;justify-content:space-between;padding:12px 4px;border-bottom:1px solid var(--border);}
+  .prayer-row:last-of-type{border-bottom:none;}
+  .prayer-name{font-weight:700;font-size:1rem;color:var(--ink);}
+
+  .star-check{width:34px;height:34px;cursor:pointer;flex-shrink:0;touch-action:manipulation;}
+  .star-check svg{width:100%;height:100%;transition:transform 0.15s;}
+  .star-check svg path{fill:var(--bg);stroke:var(--border);stroke-width:1;}
+  .star-check.checked svg path{fill:var(--gold);stroke:var(--gold);}
+  .star-check.checked svg{transform:scale(1.1);}
+  .star-check.pop svg{animation:pop 0.28s ease-out;}
+  @keyframes pop{0%{transform:scale(1);}50%{transform:scale(1.3);}100%{transform:scale(1.1);}}
+
+  .section-header{
+    font-family:'Amiri',serif; font-weight:700; font-size:0.9rem; color:var(--teal-deep);
+    margin:14px 0 4px; padding-top:10px; border-top:1px dashed var(--border);
+  }
+  .rose-check{
+    width:34px;height:34px;cursor:pointer;flex-shrink:0;touch-action:manipulation;
+    display:flex;align-items:center;justify-content:center;font-size:1.4rem;
+    filter:grayscale(1) opacity(0.35); transition:transform 0.15s, filter 0.15s;
+  }
+  .rose-check.checked{filter:grayscale(0) opacity(1); transform:scale(1.15);}
+  .rose-check.pop{animation:pop 0.28s ease-out;}
+
+  .modal-status{margin-top:16px;text-align:center;font-size:0.83rem;font-weight:800;padding:9px;border-radius:11px;}
+  .modal-status.complete{background:var(--green-bg);color:var(--green);}
+  .modal-status.missed{background:var(--red-bg);color:var(--red);}
+  .modal-status.pending{background:var(--bg);color:var(--ink-soft);}
+
+  @media (max-width:360px){
+    h1{font-size:1.8rem;}
+    .day{min-height:40px;}
+  }
+
+  /* ---- Splash screen ---- */
+  .splash-screen{
+    position:fixed; inset:0; z-index:999;
+    background:linear-gradient(160deg, var(--teal) 0%, var(--teal-deep) 100%);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+    animation: splash-fade-out 0.8s ease-in 3.6s forwards;
+  }
+  .splash-screen::before{
+    content:''; position:absolute; top:50%; left:50%; width:340px; height:340px;
+    background:radial-gradient(circle, rgba(227,168,37,0.35) 0%, transparent 70%);
+    transform:translate(-50%,-50%); animation:glow-breathe 2.4s ease-in-out infinite;
+  }
+  @keyframes glow-breathe{
+    0%,100%{ opacity:0.6; transform:translate(-50%,-50%) scale(0.9); }
+    50%{ opacity:1; transform:translate(-50%,-50%) scale(1.15); }
+  }
+  .splash-screen.tapped{ animation: splash-fade-out 0.5s ease-in forwards; }
+  @keyframes splash-fade-out{
+    to{ opacity:0; visibility:hidden; pointer-events:none; }
+  }
+  .splash-content{ position:relative; z-index:2; text-align:center; padding:0 30px; }
+  .splash-star{
+    width:52px;height:52px; margin:0 auto 18px;
+    filter:drop-shadow(0 4px 14px rgba(227,168,37,0.5));
+    animation: splash-star-in 0.8s ease-out;
+  }
+  @keyframes splash-star-in{
+    0%{ transform:scale(0) rotate(-30deg); opacity:0; }
+    100%{ transform:scale(1) rotate(0deg); opacity:1; }
+  }
+  .splash-text{
+    font-family:'Amiri',serif; font-weight:700; font-style:italic;
+    font-size:1.55rem; line-height:1.5; color:#FBF3DE;
+    text-shadow:0 2px 12px rgba(0,0,0,0.25);
+    animation: splash-text-in 1s ease-out 0.2s both;
+  }
+  @keyframes splash-text-in{
+    0%{ opacity:0; transform:translateY(10px); }
+    100%{ opacity:1; transform:translateY(0); }
+  }
+  .flower{
+    position:absolute; width:48px; height:48px; opacity:0;
+    animation: flower-bloom 0.9s ease-out forwards;
+  }
+  @keyframes flower-bloom{
+    0%{ transform:scale(0) rotate(-40deg); opacity:0; }
+    100%{ transform:scale(1) rotate(0deg); opacity:0.9; }
+  }
+  .f1{ top:8%;  left:10%; width:40px; height:40px; animation-delay:0.1s; }
+  .f2{ top:14%; right:12%; width:54px; height:54px; animation-delay:0.25s; }
+  .f3{ bottom:16%; left:8%; width:46px; height:46px; animation-delay:0.4s; }
+  .f4{ bottom:10%; right:9%; width:60px; height:60px; animation-delay:0.15s; }
+  .f5{ top:42%; left:4%; width:30px; height:30px; animation-delay:0.55s; }
+  .f6{ top:38%; right:5%; width:34px; height:34px; animation-delay:0.35s; }
+  .f7{ top:2%; left:38%; width:32px; height:32px; animation-delay:0.5s; }
+  .f8{ bottom:4%; left:36%; width:30px; height:30px; animation-delay:0.65s; }
+  .f9{ top:24%; left:22%; width:22px; height:22px; animation-delay:0.7s; }
+  .f10{ bottom:26%; right:22%; width:24px; height:24px; animation-delay:0.6s; }
+
+  .twinkle{
+    position:absolute; width:14px; height:14px; opacity:0;
+    animation: twinkle-flash 1.8s ease-in-out infinite;
+  }
+  @keyframes twinkle-flash{
+    0%, 100%{ opacity:0; transform:scale(0.4) rotate(0deg); }
+    50%{ opacity:1; transform:scale(1) rotate(90deg); }
+  }
+  .t1{ top:20%; left:24%; animation-delay:0.3s; }
+  .t2{ top:10%; right:28%; animation-delay:0.9s; }
+  .t3{ bottom:24%; left:18%; animation-delay:1.3s; }
+  .t4{ bottom:30%; right:16%; animation-delay:0.6s; }
+  .t5{ top:50%; left:50%; margin-left:-7px; animation-delay:1.6s; width:10px; height:10px; }
+</style>
+</head>
+<body>
+<div class="splash-screen" id="splashScreen">
+  <svg class="flower f1" viewBox="0 0 60 60"><g fill="#E3A825"><circle cx="30" cy="14" r="10"/><circle cx="30" cy="46" r="10"/><circle cx="14" cy="30" r="10"/><circle cx="46" cy="30" r="10"/></g><circle cx="30" cy="30" r="9" fill="#F6DFA0"/></svg>
+  <svg class="flower f2" viewBox="0 0 60 60"><g fill="#F6DFA0"><circle cx="30" cy="14" r="9"/><circle cx="30" cy="46" r="9"/><circle cx="14" cy="30" r="9"/><circle cx="46" cy="30" r="9"/></g><circle cx="30" cy="30" r="7" fill="#E3A825"/></svg>
+  <svg class="flower f3" viewBox="0 0 60 60"><g fill="#9EDBAF"><circle cx="30" cy="14" r="8"/><circle cx="30" cy="46" r="8"/><circle cx="14" cy="30" r="8"/><circle cx="46" cy="30" r="8"/></g><circle cx="30" cy="30" r="6" fill="#E3A825"/></svg>
+  <svg class="flower f4" viewBox="0 0 60 60"><g fill="#E3A825"><circle cx="30" cy="14" r="9"/><circle cx="30" cy="46" r="9"/><circle cx="14" cy="30" r="9"/><circle cx="46" cy="30" r="9"/></g><circle cx="30" cy="30" r="7" fill="#F6DFA0"/></svg>
+  <svg class="flower f5" viewBox="0 0 60 60"><g fill="#F6DFA0"><circle cx="30" cy="14" r="8"/><circle cx="30" cy="46" r="8"/><circle cx="14" cy="30" r="8"/><circle cx="46" cy="30" r="8"/></g><circle cx="30" cy="30" r="6" fill="#9EDBAF"/></svg>
+  <svg class="flower f6" viewBox="0 0 60 60"><g fill="#9EDBAF"><circle cx="30" cy="14" r="9"/><circle cx="30" cy="46" r="9"/><circle cx="14" cy="30" r="9"/><circle cx="46" cy="30" r="9"/></g><circle cx="30" cy="30" r="7" fill="#E3A825"/></svg>
+  <svg class="flower f7" viewBox="0 0 60 60"><g fill="#F2A6B0"><circle cx="30" cy="14" r="9"/><circle cx="30" cy="46" r="9"/><circle cx="14" cy="30" r="9"/><circle cx="46" cy="30" r="9"/></g><circle cx="30" cy="30" r="7" fill="#FCEAD0"/></svg>
+  <svg class="flower f8" viewBox="0 0 60 60"><g fill="#B7D9E8"><circle cx="30" cy="14" r="8"/><circle cx="30" cy="46" r="8"/><circle cx="14" cy="30" r="8"/><circle cx="46" cy="30" r="8"/></g><circle cx="30" cy="30" r="6" fill="#E3A825"/></svg>
+  <svg class="flower f9" viewBox="0 0 60 60"><g fill="#E3A825"><circle cx="30" cy="14" r="7"/><circle cx="30" cy="46" r="7"/><circle cx="14" cy="30" r="7"/><circle cx="46" cy="30" r="7"/></g><circle cx="30" cy="30" r="5" fill="#F2A6B0"/></svg>
+  <svg class="flower f10" viewBox="0 0 60 60"><g fill="#F2A6B0"><circle cx="30" cy="14" r="7"/><circle cx="30" cy="46" r="7"/><circle cx="14" cy="30" r="7"/><circle cx="46" cy="30" r="7"/></g><circle cx="30" cy="30" r="5" fill="#F6DFA0"/></svg>
+  <svg class="twinkle t1" viewBox="0 0 20 20" fill="#FFF6DD"><path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z"/></svg>
+  <svg class="twinkle t2" viewBox="0 0 20 20" fill="#FFF6DD"><path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z"/></svg>
+  <svg class="twinkle t3" viewBox="0 0 20 20" fill="#FFF6DD"><path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z"/></svg>
+  <svg class="twinkle t4" viewBox="0 0 20 20" fill="#FFF6DD"><path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z"/></svg>
+  <svg class="twinkle t5" viewBox="0 0 20 20" fill="#FFF6DD"><path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z"/></svg>
+  <div class="splash-content">
+    <svg class="splash-star" viewBox="0 0 100 100" fill="#E3A825"><path d="M50 0 L61 39 L100 39 L68 61 L79 100 L50 76 L21 100 L32 61 L0 39 L39 39 Z"/></svg>
+    <div class="splash-text">Namoz — barcha<br>muvaffaqiyatlar kaliti</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="header">
+    <button class="settings-gear" id="settingsGear" aria-label="Sozlamalar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    <svg class="star-mark" viewBox="0 0 100 100" fill="currentColor">
+      <path d="M50 0 L61 39 L100 39 L68 61 L79 100 L50 76 L21 100 L32 61 L0 39 L39 39 Z"/>
+    </svg>
+    <h1>Namoz Kundaligi</h1>
+    <div class="subtitle">Namoz, ro'za, kunlik vazifa va Qur'on tilovatini belgilab boring</div>
+    <div class="greeting" id="greeting" style="display:none;"></div>
+  </div>
+
+  <div class="banner" id="banner">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
+    <div>
+      <span id="bannerText">Sizda o'qilmagan namoz bor</span>
+      <span class="sub" id="bannerSub"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cal-nav">
+      <button class="nav-btn" id="prevBtn" aria-label="Oldingi oy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="month-title" id="monthTitle"></div>
+      <button class="nav-btn" id="nextBtn" aria-label="Keyingi oy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <button class="today-btn" id="todayBtn">Bugungi kunga o'tish</button>
+
+    <div class="rose-total-bar">🌹 Bu oyda yig'ilgan qo'shimcha amallar: <span id="roseTotal">0</span></div>
+
+    <div class="weekdays">
+      <span>Du</span><span>Se</span><span>Ch</span><span>Pa</span><span>Ju</span><span>Sh</span><span>Ya</span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="footnote">Yashil — 5 vaqt namoz to'liq o'qilgan &nbsp;•&nbsp; Qizil — kamida bitta vaqt o'qilmagan &nbsp;•&nbsp; 🌹 — qo'shimcha amallar</div>
+</div>
+
+<div class="overlay" id="settingsOverlay">
+  <div class="modal settings-modal">
+    <button class="modal-close" id="settingsCloseBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="modal-date" style="margin-bottom:16px;">Sozlamalar</div>
+
+    <div class="settings-row">
+      <label class="settings-label">Ismi sharifingiz</label>
+      <input type="text" id="nameInput" class="settings-input" placeholder="Ismingizni kiriting" maxlength="60">
+    </div>
+
+    <div class="notify-card">
+      <div class="txt">Boshlang'ich kun
+        <span id="startDateText">Yuklanmoqda...</span>
+      </div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button class="notify-btn" id="startDateBtn" style="background:var(--teal);">O'zgartirish</button>
+        <input type="date" id="startDateInput" style="display:none;">
+      </div>
+    </div>
+
+    <div class="notify-card">
+      <div class="txt">Chiqishda tasdiqlash
+        <span id="exitConfirmStatusText">Ilovadan chiqishdan oldin savol beriladi</span>
+      </div>
+      <button class="notify-btn" id="exitConfirmBtn">Yoqilgan</button>
+    </div>
+
+    <div class="notify-card">
+      <div class="txt">Kechki eslatma
+        <span id="notifyStatusText">Har kuni soat 21:00 da bildirishnoma olish uchun yoqing</span>
+      </div>
+      <button class="notify-btn" id="notifyBtn">Yoqish</button>
+    </div>
+
+    <div class="notify-card">
+      <div class="txt">Ma'lumotni zaxiralash
+        <span>Kesh tozalansa ham yo'qolmasligi uchun faylga saqlang</span>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="notify-btn" id="exportBtn" style="background:var(--teal);">Yuklab olish</button>
+        <button class="notify-btn" id="importBtn" style="background:var(--gold); color:var(--teal-deep);">Tiklash</button>
+        <input type="file" id="importFile" accept="application/json" style="display:none;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="exitOverlay">
+  <div class="modal exit-modal">
+    <svg class="exit-icon" viewBox="0 0 100 100" fill="#E3A825"><path d="M50 0 L61 39 L100 39 L68 61 L79 100 L50 76 L21 100 L32 61 L0 39 L39 39 Z"/></svg>
+    <div class="exit-title">Chiqmoqchimisiz?</div>
+    <div class="exit-sub">Amallaringiz allaqachon saqlangan</div>
+    <div class="exit-buttons">
+      <button class="exit-btn stay" id="exitStayBtn">Yo'q, qolaman</button>
+      <button class="exit-btn leave" id="exitLeaveBtn">Ha, chiqaman</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal" id="modalBox">
+    <div class="sparkle-layer" id="sparkleLayer"></div>
+    <div class="barakalla" id="barakalla" style="display:none;">Barakalla! ✨</div>
+    <button class="modal-close" id="closeBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="modal-date" id="modalDate"></div>
+    <div class="modal-weekday" id="modalWeekday"></div>
+    <div id="prayerList"></div>
+    <div class="modal-status" id="modalStatus"></div>
+  </div>
+</div>
+
+<script>
+const PRAYERS = ["Bomdod","Peshin","Asr","Shom","Xufton"];
+const EXTRA_TASKS = [
+  { key:"Roza", label:"Ro'za" },
+  { key:"Vazifa", label:"Kunlik vazifa" },
+  { key:"Quron", label:"Qur'on o'qish" }
+];
+const MONTHS_UZ = ["Yanvar","Fevral","Mart","Aprel","May","Iyun","Iyul","Avgust","Sentyabr","Oktyabr","Noyabr","Dekabr"];
+const WEEKDAYS_FULL = ["Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba","Yakshanba"];
+
+let startDate = new Date(); // standart holatda bugun; foydalanuvchi o'zgartirishi mumkin
+
+let log = {};
+let viewDate = new Date();
+let selectedKey = null;
+let audioCtx = null;
+
+const grid = document.getElementById('grid');
+const monthTitle = document.getElementById('monthTitle');
+const overlay = document.getElementById('overlay');
+const banner = document.getElementById('banner');
+const bannerSub = document.getElementById('bannerSub');
+const modalBox = document.getElementById('modalBox');
+const sparkleLayer = document.getElementById('sparkleLayer');
+const barakalla = document.getElementById('barakalla');
+const roseTotalEl = document.getElementById('roseTotal');
+
+/* ---------- helpers ---------- */
+function pad(n){return n.toString().padStart(2,'0');}
+function keyOf(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;}
+function sameDay(a,b){return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();}
+function startOfDay(d){const x=new Date(d);x.setHours(0,0,0,0);return x;}
+function getEntry(key){
+  const e = log[key] || {};
+  return {
+    Bomdod: !!e.Bomdod, Peshin: !!e.Peshin, Asr: !!e.Asr, Shom: !!e.Shom, Xufton: !!e.Xufton,
+    Roza: !!e.Roza, Vazifa: !!e.Vazifa, Quron: !!e.Quron
+  };
+}
+function countChecked(entry){ return PRAYERS.reduce((n,p)=>n+(entry[p]?1:0),0); }
+function countExtra(entry){ return EXTRA_TASKS.reduce((n,t)=>n+(entry[t.key]?1:0),0); }
+function statusOf(key, dateObj, today){
+  const entry = getEntry(key);
+  const c = countChecked(entry);
+  if(c===5) return 'complete';
+  const d0 = startOfDay(dateObj);
+  if(d0 < startOfDay(today) && d0 >= startOfDay(startDate)) return 'missed';
+  return 'pending';
+}
+
+/* ---------- storage (IndexedDB, so both the page and the service worker can read it) ---------- */
+function idbOpen(){
+  return new Promise((resolve,reject)=>{
+    const req = indexedDB.open('namozDB',1);
+    req.onupgradeneeded = ()=>{ req.result.createObjectStore('data'); };
+    req.onsuccess = ()=>resolve(req.result);
+    req.onerror = ()=>reject(req.error);
+  });
+}
+async function idbGet(key){
+  try{
+    const db = await idbOpen();
+    const tx = db.transaction('data','readonly');
+    return await new Promise((res)=>{
+      const r = tx.objectStore('data').get(key);
+      r.onsuccess = ()=>res(r.result || null);
+      r.onerror = ()=>res(null);
+    });
+  }catch(e){ return null; }
+}
+async function idbSet(key, value){
+  try{
+    const db = await idbOpen();
+    const tx = db.transaction('data','readwrite');
+    tx.objectStore('data').put(value, key);
+  }catch(e){ console.error('Saqlashda xatolik', e); }
+}
+
+async function loadData(){
+  const val = await idbGet('prayerLog');
+  log = val ? JSON.parse(val) : {};
+}
+async function saveData(){
+  await idbSet('prayerLog', JSON.stringify(log));
+}
+
+async function loadStartDate(){
+  const val = await idbGet('startDate');
+  if(val){
+    const [y,m,d] = val.split('-').map(Number);
+    startDate = new Date(y, m-1, d);
+  } else {
+    startDate = startOfDay(new Date());
+    await saveStartDate(startDate);
+  }
+}
+async function saveStartDate(dateObj){
+  startDate = dateObj;
+  await idbSet('startDate', keyOf(dateObj));
+}
+
+async function loadName(){
+  const val = await idbGet('userName');
+  return val || '';
+}
+async function saveName(name){
+  await idbSet('userName', name);
+}
+
+/* ---------- sound + haptics ---------- */
+function ensureAudio(){
+  if(!audioCtx){
+    try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){}
+  }
+  if(audioCtx && audioCtx.state === 'suspended'){ audioCtx.resume(); }
+}
+function playTone(freq, duration, delay=0, volume=0.08){
+  if(!audioCtx) return;
+  const t0 = audioCtx.currentTime + delay;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'sine';
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, t0);
+  gain.gain.linearRampToValueAtTime(volume, t0 + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, t0 + duration);
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start(t0);
+  osc.stop(t0 + duration + 0.02);
+}
+function feedbackToggleOn(){
+  ensureAudio(); playTone(660, 0.18);
+  if(navigator.vibrate) navigator.vibrate(12);
+}
+function feedbackToggleOff(){
+  ensureAudio(); playTone(392, 0.14);
+  if(navigator.vibrate) navigator.vibrate(8);
+}
+function feedbackComplete(){
+  ensureAudio();
+  [523.25, 659.25, 783.99, 1046.5].forEach((f,i)=>playTone(f, 0.35, i*0.09, 0.07));
+  if(navigator.vibrate) navigator.vibrate([30,40,30,40,70]);
+}
+function playSplashMelody(){
+  ensureAudio();
+  if(!audioCtx) return;
+  // Yoqimli, tinch pentatonik ohang — taxminan 3.5 soniya
+  const notes = [
+    {f:392.00, t:0.00, d:0.55},
+    {f:523.25, t:0.45, d:0.55},
+    {f:659.25, t:0.90, d:0.65},
+    {f:587.33, t:1.55, d:0.55},
+    {f:783.99, t:2.05, d:0.75},
+    {f:659.25, t:2.75, d:0.9}
+  ];
+  notes.forEach(n=>playTone(n.f, n.d, n.t, 0.05));
+}
+
+/* ---------- celebration visuals ---------- */
+function celebrate(){
+  modalBox.classList.remove('celebrate');
+  void modalBox.offsetWidth;
+  modalBox.classList.add('celebrate');
+  barakalla.style.display = 'block';
+  barakalla.style.animation = 'none';
+  void barakalla.offsetWidth;
+  barakalla.style.animation = '';
+
+  sparkleLayer.innerHTML = '';
+  const w = modalBox.clientWidth, h = modalBox.clientHeight;
+  for(let i=0;i<16;i++){
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    const left = 10 + Math.random()*(w-20);
+    const top = h*0.35 + Math.random()*(h*0.4);
+    s.style.left = left+'px';
+    s.style.top = top+'px';
+    s.style.animationDelay = (Math.random()*0.25)+'s';
+    s.innerHTML = `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 0 L61 39 L100 39 L68 61 L79 100 L50 76 L21 100 L32 61 L0 39 L39 39 Z"/></svg>`;
+    sparkleLayer.appendChild(s);
+  }
+  setTimeout(()=>{ sparkleLayer.innerHTML=''; }, 1300);
+}
+
+/* ---------- calendar rendering ---------- */
+function renderCalendar(){
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth();
+  const today = new Date();
+
+  monthTitle.innerHTML = `${MONTHS_UZ[month]}<span class="year">${year}</span>`;
+
+  const firstOfMonth = new Date(year, month, 1);
+  let startWeekday = firstOfMonth.getDay();
+  startWeekday = (startWeekday + 6) % 7;
+
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+  const cells = [];
+  for(let i=startWeekday-1;i>=0;i--){
+    cells.push({day:daysInPrevMonth-i, dim:true, date:new Date(year, month-1, daysInPrevMonth-i)});
+  }
+  for(let d=1; d<=daysInMonth; d++){
+    cells.push({day:d, dim:false, date:new Date(year, month, d)});
+  }
+  let next=1;
+  while(cells.length % 7 !== 0 || cells.length < 42){
+    cells.push({day:next, dim:true, date:new Date(year, month+1, next)});
+    next++;
+    if(cells.length>=42) break;
+  }
+
+  grid.innerHTML = '';
+  let monthRoseTotal = 0;
+  cells.forEach(cell=>{
+    const key = keyOf(cell.date);
+    const div = document.createElement('div');
+    div.className = 'day';
+    if(cell.dim){
+      div.classList.add('dim');
+    } else {
+      const st = statusOf(key, cell.date, today);
+      if(st==='complete') div.classList.add('complete');
+      if(st==='missed') div.classList.add('missed');
+      if(sameDay(cell.date, today)) div.classList.add('today');
+    }
+    const entry = getEntry(key);
+    const dotsHtml = PRAYERS.map(p=>`<span class="${entry[p]?'on':''}"></span>`).join('');
+    const roseCount = countExtra(entry);
+    if(!cell.dim) monthRoseTotal += roseCount;
+    const rosesHtml = roseCount>0 ? `<div class="day-roses">${'🌹'.repeat(roseCount)}</div>` : '';
+    div.innerHTML = `${rosesHtml}<div class="num">${cell.day}</div><div class="dots">${dotsHtml}</div>`;
+    if(!cell.dim){
+      div.addEventListener('click', ()=>openModal(cell.date));
+    }
+    grid.appendChild(div);
+  });
+  if(roseTotalEl) roseTotalEl.textContent = monthRoseTotal;
+
+  updateBanner();
+}
+
+function updateBanner(){
+  const today = startOfDay(new Date());
+  const start = startOfDay(startDate);
+  let missedDates = [];
+  for(const key in log){
+    const [y,m,d] = key.split('-').map(Number);
+    const dObj = new Date(y, m-1, d);
+    if(startOfDay(dObj) < today && startOfDay(dObj) >= start){
+      const c = countChecked(log[key]);
+      if(c<5) missedDates.push(dObj);
+    }
+  }
+  if(missedDates.length>0){
+    missedDates.sort((a,b)=>a-b);
+    banner.classList.add('show');
+    const count = missedDates.length;
+    document.getElementById('bannerText').textContent =
+      count===1 ? "Sizda o'qilmagan namoz bor" : `Sizda ${count} kunlik o'qilmagan namozlar bor`;
+    const first = missedDates[0];
+    bannerSub.textContent = `${first.getDate()}-${MONTHS_UZ[first.getMonth()]} kunidan boshlab. Kalendarda qizil kunlarni tekshiring.`;
+  } else {
+    banner.classList.remove('show');
+  }
+}
+
+/* ---------- modal ---------- */
+function openModal(dateObj){
+  selectedKey = keyOf(dateObj);
+  document.getElementById('modalDate').textContent = `${dateObj.getDate()}-${MONTHS_UZ[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+  document.getElementById('modalWeekday').textContent = WEEKDAYS_FULL[(dateObj.getDay()+6)%7];
+  barakalla.style.display = 'none';
+  sparkleLayer.innerHTML = '';
+  modalBox.classList.remove('celebrate');
+  renderPrayerList(dateObj);
+  overlay.classList.add('show');
+}
+
+function renderPrayerList(dateObj){
+  const entry = getEntry(selectedKey);
+  const list = document.getElementById('prayerList');
+  list.innerHTML = '';
+  const isFuture = startOfDay(dateObj) > startOfDay(new Date());
+
+  if(isFuture){
+    const notice = document.createElement('div');
+    notice.className = 'future-notice';
+    notice.textContent = "Bu kun hali kelmagan — vazifalarni oldindan belgilab bo'lmaydi";
+    list.appendChild(notice);
+  }
+
+  PRAYERS.forEach(p=>{
+    const row = document.createElement('div');
+    row.className = 'prayer-row';
+    row.innerHTML = `
+      <span class="prayer-name">${p}</span>
+      <span class="star-check ${entry[p]?'checked':''} ${isFuture?'disabled':''}" data-p="${p}">
+        <svg viewBox="0 0 100 100"><path d="M50 4 L61 39 L98 39 L67 60 L78 96 L50 74 L22 96 L33 60 L2 39 L39 39 Z"/></svg>
+      </span>
+    `;
+    list.appendChild(row);
+  });
+
+  const sectionHeader = document.createElement('div');
+  sectionHeader.className = 'section-header';
+  sectionHeader.textContent = "Qo'shimcha amallar";
+  list.appendChild(sectionHeader);
+
+  EXTRA_TASKS.forEach(t=>{
+    const row = document.createElement('div');
+    row.className = 'prayer-row';
+    row.innerHTML = `
+      <span class="prayer-name">${t.label}</span>
+      <span class="rose-check ${entry[t.key]?'checked':''} ${isFuture?'disabled':''}" data-p="${t.key}">🌹</span>
+    `;
+    list.appendChild(row);
+  });
+
+  if(isFuture){
+    updateStatusLabel();
+    return;
+  }
+
+  list.querySelectorAll('.star-check').forEach(el=>{
+    el.addEventListener('click', async ()=>{
+      const p = el.dataset.p;
+      const e = getEntry(selectedKey);
+      const turningOn = !e[p];
+      e[p] = turningOn;
+      log[selectedKey] = e;
+      el.classList.toggle('checked');
+      el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+      turningOn ? feedbackToggleOn() : feedbackToggleOff();
+      await saveData();
+      updateStatusLabel();
+      renderCalendar();
+      if(turningOn && countChecked(e)===5){
+        celebrate();
+        feedbackComplete();
+      }
+    });
+  });
+
+  list.querySelectorAll('.rose-check').forEach(el=>{
+    el.addEventListener('click', async ()=>{
+      const p = el.dataset.p;
+      const e = getEntry(selectedKey);
+      const turningOn = !e[p];
+      e[p] = turningOn;
+      log[selectedKey] = e;
+      el.classList.toggle('checked');
+      el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+      turningOn ? feedbackToggleOn() : feedbackToggleOff();
+      await saveData();
+      updateStatusLabel();
+      renderCalendar();
+    });
+  });
+
+  updateStatusLabel();
+}
+
+function updateStatusLabel(){
+  const entry = getEntry(selectedKey);
+  const c = countChecked(entry);
+  const ce = countExtra(entry);
+  const [y,m,d] = selectedKey.split('-').map(Number);
+  const dObj = new Date(y,m-1,d);
+  const today = new Date();
+  const st = statusOf(selectedKey, dObj, today);
+  const box = document.getElementById('modalStatus');
+  box.classList.remove('complete','missed','pending');
+  box.classList.add(st);
+  let mainText;
+  if(st==='complete') mainText = "Barcha 5 vaqt o'qilgan ✓";
+  else if(st==='missed') mainText = `${c}/5 o'qilgan — bu kun qizil belgilanadi`;
+  else mainText = `${c}/5 o'qilgan`;
+  box.innerHTML = `${mainText}<br><span style="font-weight:600; opacity:0.8;">Qo'shimcha: ${ce}/3 🌹</span>`;
+}
+
+document.getElementById('closeBtn').addEventListener('click', ()=>overlay.classList.remove('show'));
+overlay.addEventListener('click', (e)=>{ if(e.target===overlay) overlay.classList.remove('show'); });
+
+document.getElementById('prevBtn').addEventListener('click', ()=>{
+  viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth()-1, 1);
+  renderCalendar();
+});
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth()+1, 1);
+  renderCalendar();
+});
+document.getElementById('todayBtn').addEventListener('click', ()=>{
+  viewDate = new Date();
+  renderCalendar();
+});
+
+/* ---------- notifications ---------- */
+const notifyBtn = document.getElementById('notifyBtn');
+const notifyStatusText = document.getElementById('notifyStatusText');
+let dailyTimer = null;
+
+function scheduleDailyReminder(){
+  if(dailyTimer) clearTimeout(dailyTimer);
+  const now = new Date();
+  const next = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 21, 0, 0, 0);
+  if(next <= now) next.setDate(next.getDate()+1);
+  const wait = next - now;
+  dailyTimer = setTimeout(async ()=>{
+    await checkAndFireNotification();
+    scheduleDailyReminder();
+  }, wait);
+}
+
+async function checkAndFireNotification(){
+  const today = startOfDay(new Date());
+  const start = startOfDay(startDate);
+  let missed = 0, first = null;
+  for(const key in log){
+    const [y,m,d] = key.split('-').map(Number);
+    const dObj = new Date(y,m-1,d);
+    if(startOfDay(dObj) < today && startOfDay(dObj) >= start && countChecked(log[key])<5){
+      missed++;
+      if(!first || dObj<first) first = dObj;
+    }
+  }
+  if(missed>0 && Notification.permission === 'granted'){
+    const reg = await navigator.serviceWorker.getRegistration();
+    const body = missed===1 ? "Sizda o'qilmagan namoz bor" : `${missed} kunlik o'qilmagan namozlaringiz bor`;
+    if(reg){
+      reg.showNotification('Namoz Kundaligi', { body, icon:'icon.svg', badge:'icon.svg', tag:'namoz-eslatma', vibrate:[80,40,80] });
+    } else {
+      new Notification('Namoz Kundaligi', { body, icon:'icon.svg' });
+    }
+  }
+}
+
+function updateNotifyUI(){
+  if(!('Notification' in window)){
+    notifyStatusText.textContent = "Bu brauzer bildirishnomani qo'llab-quvvatlamaydi";
+    notifyBtn.style.display = 'none';
+    return;
+  }
+  if(Notification.permission === 'granted'){
+    notifyBtn.textContent = 'Yoqilgan';
+    notifyBtn.disabled = true;
+    notifyStatusText.textContent = "Har kuni ~21:00 da eslatma keladi (ilova ochiq/fonda bo'lsa)";
+  } else {
+    notifyBtn.textContent = 'Yoqish';
+    notifyBtn.disabled = false;
+    notifyStatusText.textContent = "Har kuni soat 21:00 da bildirishnoma olish uchun yoqing";
+  }
+}
+
+notifyBtn.addEventListener('click', async ()=>{
+  if(!('Notification' in window)) return;
+  const perm = await Notification.requestPermission();
+  updateNotifyUI();
+  if(perm === 'granted'){
+    scheduleDailyReminder();
+    try{
+      const reg = await navigator.serviceWorker.ready;
+      const status = await navigator.permissions.query({name:'periodic-background-sync'});
+      if(status.state === 'granted'){
+        await reg.periodicSync.register('namoz-eslatma', { minInterval: 24*60*60*1000 });
+      }
+    }catch(e){ /* periodic background sync not supported here — foreground timer still works */ }
+  }
+});
+
+/* ---------- exit confirmation ---------- */
+const exitOverlay = document.getElementById('exitOverlay');
+const exitConfirmBtn = document.getElementById('exitConfirmBtn');
+const exitConfirmStatusText = document.getElementById('exitConfirmStatusText');
+let exitConfirmEnabled = true;
+let exitGuardActive = false;
+
+function pushExitGuard(){
+  if(exitGuardActive) return;
+  exitGuardActive = true;
+  history.pushState({namozGuard:true}, '', '#namoz-app');
+}
+function popExitGuard(){
+  if(!exitGuardActive) return;
+  exitGuardActive = false;
+  history.back();
+}
+
+// Himoyani DARHOL, hech narsani kutmasdan o'rnatamiz — aks holda foydalanuvchi
+// sozlamalar yuklanguncha orqaga bossa, ilova to'sqinliksiz yopilib ketadi.
+pushExitGuard();
+
+function updateExitConfirmUI(){
+  if(exitConfirmEnabled){
+    exitConfirmBtn.textContent = 'Yoqilgan';
+    exitConfirmBtn.style.background = 'var(--green)';
+    exitConfirmStatusText.textContent = 'Ilovadan chiqishdan oldin savol beriladi';
+    pushExitGuard();
+  } else {
+    exitConfirmBtn.textContent = "O'chirilgan";
+    exitConfirmBtn.style.background = 'var(--ink-soft)';
+    exitConfirmStatusText.textContent = 'Orqaga tugmasi bosilsa, darhol chiqib ketadi';
+  }
+}
+
+async function loadExitConfirmSetting(){
+  const val = await idbGet('exitConfirm');
+  exitConfirmEnabled = val === null ? true : val === '1';
+}
+async function saveExitConfirmSetting(){
+  await idbSet('exitConfirm', exitConfirmEnabled ? '1' : '0');
+}
+
+exitConfirmBtn.addEventListener('click', async ()=>{
+  exitConfirmEnabled = !exitConfirmEnabled;
+  await saveExitConfirmSetting();
+  updateExitConfirmUI();
+});
+
+window.addEventListener('popstate', ()=>{
+  exitGuardActive = false;
+  if(!exitConfirmEnabled){ return; }
+  if(overlay.classList.contains('show')){ overlay.classList.remove('show'); pushExitGuard(); return; }
+  if(settingsOverlay.classList.contains('show')){ settingsOverlay.classList.remove('show'); pushExitGuard(); return; }
+  exitOverlay.classList.add('show');
+});
+
+document.getElementById('exitStayBtn').addEventListener('click', ()=>{
+  exitOverlay.classList.remove('show');
+  pushExitGuard();
+});
+document.getElementById('exitLeaveBtn').addEventListener('click', ()=>{
+  exitOverlay.classList.remove('show');
+  window.close();
+});
+
+/* ---------- settings modal ---------- */
+const settingsGear = document.getElementById('settingsGear');
+const settingsOverlay = document.getElementById('settingsOverlay');
+const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+const nameInput = document.getElementById('nameInput');
+const greetingEl = document.getElementById('greeting');
+
+settingsGear.addEventListener('click', ()=>{ settingsOverlay.classList.add('show'); });
+settingsCloseBtn.addEventListener('click', ()=>settingsOverlay.classList.remove('show'));
+settingsOverlay.addEventListener('click', (e)=>{ if(e.target===settingsOverlay) settingsOverlay.classList.remove('show'); });
+
+let nameSaveTimer = null;
+nameInput.addEventListener('input', ()=>{
+  clearTimeout(nameSaveTimer);
+  nameSaveTimer = setTimeout(async ()=>{
+    const val = nameInput.value.trim();
+    await saveName(val);
+    updateGreeting(val);
+  }, 500);
+});
+function updateGreeting(name){
+  if(name){
+    greetingEl.textContent = `Assalomu alaykum, ${name}!`;
+    greetingEl.style.display = 'block';
+  } else {
+    greetingEl.style.display = 'none';
+  }
+}
+
+/* ---------- start date settings ---------- */
+const startDateBtn = document.getElementById('startDateBtn');
+const startDateInput = document.getElementById('startDateInput');
+const startDateText = document.getElementById('startDateText');
+
+function updateStartDateUI(){
+  startDateText.textContent = `${startDate.getDate()}-${MONTHS_UZ[startDate.getMonth()]} ${startDate.getFullYear()} kunidan boshlab hisoblanmoqda`;
+  startDateInput.value = keyOf(startDate);
+}
+startDateBtn.addEventListener('click', ()=>{ startDateInput.showPicker ? startDateInput.showPicker() : startDateInput.click(); });
+startDateInput.addEventListener('change', async ()=>{
+  if(!startDateInput.value) return;
+  const [y,m,d] = startDateInput.value.split('-').map(Number);
+  await saveStartDate(new Date(y, m-1, d));
+  updateStartDateUI();
+  renderCalendar();
+});
+
+/* ---------- backup: export / import ---------- */
+document.getElementById('exportBtn').addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(log, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const today = new Date();
+  a.href = url;
+  a.download = `namoz-zaxira-${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('importBtn').addEventListener('click', ()=>{
+  document.getElementById('importFile').click();
+});
+document.getElementById('importFile').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = async (ev)=>{
+    try{
+      const imported = JSON.parse(ev.target.result);
+      if(typeof imported !== 'object' || Array.isArray(imported)) throw new Error('format noto\'g\'ri');
+      log = Object.assign({}, log, imported);
+      await saveData();
+      renderCalendar();
+      alert("Ma'lumot muvaffaqiyatli tiklandi.");
+    }catch(err){
+      alert("Fayl noto'g'ri formatda. Iltimos, shu ilovadan yuklab olingan zaxira faylni tanlang.");
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+});
+
+/* ---------- init ---------- */
+const splashScreen = document.getElementById('splashScreen');
+let splashMelodyPlayed = false;
+function tryPlaySplashMelody(){
+  if(splashMelodyPlayed) return;
+  splashMelodyPlayed = true;
+  playSplashMelody();
+}
+if(splashScreen){
+  splashScreen.addEventListener('click', ()=>{ splashScreen.classList.add('tapped'); tryPlaySplashMelody(); });
+  setTimeout(()=>{ splashScreen.style.display='none'; }, 4500);
+  // Ko'p brauzerlar ovozni faqat foydalanuvchi harakatidan keyin ruxsat beradi —
+  // shuning uchun birinchi teginish/bosishda ham urinib ko'ramiz.
+  document.addEventListener('touchstart', tryPlaySplashMelody, {once:true});
+  document.addEventListener('click', tryPlaySplashMelody, {once:true});
+  tryPlaySplashMelody();
+}
+(async function init(){
+  await loadData();
+  await loadStartDate();
+  updateStartDateUI();
+  await loadExitConfirmSetting();
+  updateExitConfirmUI();
+  if(!exitConfirmEnabled){
+    popExitGuard();
+  }
+  const savedName = await loadName();
+  nameInput.value = savedName;
+  updateGreeting(savedName);
+  renderCalendar();
+  updateNotifyUI();
+  if('serviceWorker' in navigator){
+    try{ await navigator.serviceWorker.register('sw.js'); }catch(e){ console.warn('SW ro\'yxatdan o\'tmadi', e); }
+  }
+  if(window.Notification && Notification.permission === 'granted'){
+    scheduleDailyReminder();
+  }
+  document.addEventListener('visibilitychange', ()=>{
+    if(document.visibilityState==='visible' && Notification && Notification.permission==='granted'){
+      checkAndFireNotification();
+    }
+  });
+})();
+</script>
+</body>
+</html>
